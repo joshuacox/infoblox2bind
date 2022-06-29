@@ -72,6 +72,7 @@ before_script:
 - mkdir -p clusters/default
 # Fix the kubectl context, as it's often stale.
 - minikube update-context
+- mkdir -p /home/travis/.kubash/bin
 - which bats
 
 script:
