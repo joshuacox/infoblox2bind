@@ -74,6 +74,8 @@ zone "$ZONE" {
 EOF
 
 cat <<EOF > $TMP/run
+#!/bin/sh
+set -eux
 docker run -it -d --rm \
   --cidfile=.cid \
   -v $THIS_PWD/named.conf:/etc/bind/named.conf \
