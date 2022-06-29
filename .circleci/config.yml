@@ -15,6 +15,9 @@ jobs:
             echo virtualenv helloworld
             echo . helloworld/bin/activate
             echo pip install --no-cache-dir -r requirements.txt
+            cat /etc/os-release
+            apt-get update
+            apt-get install -yqq dnsutils
       - run:
           name: Run Tests
           command: |

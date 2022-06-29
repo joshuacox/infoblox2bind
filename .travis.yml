@@ -29,6 +29,7 @@ addons:
   apt:
     packages:
       - curl
+      - dnsutils
       - rsync
       - socat
       - time
