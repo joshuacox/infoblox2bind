@@ -25,12 +25,12 @@ export THIS_SERVER_IP=10.0.0.1}
 ```
 
 ```
-export SERIAL=202206281738}
-export REFRESH=604800}
-export RETRY=86400}
-export TTL=604800}
-export EXPIRE=2419200}
-export NEGATIVE_CACHE_TTL=604800}
+export SERIAL=202206281738
+export REFRESH=604800
+export RETRY=86400
+export TTL=604800
+export EXPIRE=2419200
+export NEGATIVE_CACHE_TTL=604800
 ```
 
 Then run the script:
