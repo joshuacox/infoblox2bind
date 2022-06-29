@@ -85,6 +85,7 @@ docker run -it -d \
   -p 53:53/udp \
   ubuntu/bind9:latest
 EOF
+chmod +x $TMP/run
 
 echo_slurp () {
   if [[ $VERBOSE -gt 10 ]]; then

@@ -38,15 +38,21 @@ Then run the script:
 ```
 ./infoblox2bind.bash
 using /tmp/555_All DNS Objects.csv
-
-
-Your zone file is here --> /tmp/tmp.Ee2B2lSOG0/zone.example.org.db
 ```
 
 You can also specify the input file as the only argument:
 
 ```
 ./infoblox2bind.bash /tmp/555_All\ DNS\ Objects.csv
+```
+
+This will output a few files.
+
+```
+named.conf # This is a generated named.conf
+named.conf.example.com # This is a generated named.conf.example.com
+zone.example.com # This is the generated zonefile
+run # This can be used to test the above files in a container
 ```
 
 ### Debug
@@ -56,3 +62,5 @@ Get some extra verbosity:
 ```
 export VERBOSE=11
 ```
+
+
