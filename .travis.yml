@@ -79,5 +79,7 @@ before_script:
 script:
 - ./infoblox2bind.bash ./input.csv
 - ./run
+- docker ps
+- dig @0 ww2.example.com +short
 - /bin/bash -l -c "bats .ci/test.bats"
 - kubectl apply -f .ci/bind9-deployment.yml
