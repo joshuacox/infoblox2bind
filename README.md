@@ -6,12 +6,6 @@ convert infoblox 2 bind zone
 
 You might want to export some variables before running.
 
-Set the input file:
-
-```
-export INPUT_CSV_FILE='/tmp/555_All DNS Objects.csv'
-```
-
 Set the ZONE:
 
 ```
@@ -33,13 +27,9 @@ export EXPIRE=2419200
 export NEGATIVE_CACHE_TTL=604800
 ```
 
-Then run the script:
+By default the script will use the `input.csv` in this directory.
 
-```
-./infoblox2bind.bash
-```
-
-You can also specify the input file as the only argument:
+Or specify the input file as the only argument:
 
 ```
 ./infoblox2bind.bash /tmp/555_All\ DNS\ Objects.csv
@@ -59,6 +49,20 @@ renamed '/tmp/tmp.l3W6nA7Pl3/run' -> '/tmp/infoblox2bind/run'
 1. zone.example.com # This is the generated zonefile
 1. run # This can be used to test the above files in a container
 
+### Specify input file with env var
+
+Set the input file:
+
+```
+export INPUT_CSV_FILE='/tmp/555_All DNS Objects.csv'
+```
+
+Then run the script:
+
+```
+./infoblox2bind.bash
+```
+
 ### Debug
 
 Get some extra verbosity:
@@ -66,5 +70,3 @@ Get some extra verbosity:
 ```
 export VERBOSE=11
 ```
-
-
