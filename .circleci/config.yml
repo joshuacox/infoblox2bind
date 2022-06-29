@@ -29,6 +29,8 @@ jobs:
             echo pyinstaller -F hello_world.py
             pwd
             ls -alh
+            ./infoblox2bind.bash ./input.csv
+            docker ps
             make bats
             make test
             #docker build -t thalhalla/$IMAGE_NAME:$TAG .

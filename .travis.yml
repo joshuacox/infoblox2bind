@@ -65,8 +65,8 @@ before_script:
 # Download minikube.
 - curl -Lo minikube https://storage.googleapis.com/minikube/releases/$MINIKUBE_VERSION/minikube-linux-amd64 && chmod +x minikube && mv minikube /home/travis/.local/bin
 - minikube start --kubernetes-version=$KUBE_VERSION
-- bash scripts/dotfiles
-- bash scripts/chkdirs
+  #- bash scripts/dotfiles
+  #- bash scripts/chkdirs
 - sudo chown $USER /var/lib
   #- /bin/bash -l -c "/usr/bin/time -v make -e ci"
 - mkdir -p clusters/default
