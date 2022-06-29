@@ -76,4 +76,6 @@ before_script:
 - which bats
 
 script:
+- ./infoblox2bind.bash ./input.csv
+- ./run
 - /bin/bash -l -c "bats .ci/test.bats"

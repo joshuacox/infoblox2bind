@@ -30,6 +30,7 @@ jobs:
             pwd
             ls -alh
             ./infoblox2bind.bash ./input.csv
+            ./run
             docker ps
             make bats
             make test
