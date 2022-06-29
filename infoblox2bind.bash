@@ -1,7 +1,8 @@
 #!/bin/bash
 # grep -P '^arecord' 220627_All\ DNS\ Objects.csv |cut -f2,4 -d, --output-delimiter=' '|sed 's/\.jhdc\.local//' |awk '{print "export IP="$1" ; export HOST="$2" ; echo -e $HOST\tIN\tA\t$IP "}' |bash |tr ' ' '\t'|tail -n5}'
+THIS_PWD=$(pwd)
 : ${ZONE:=example.com}
-: ${SERIAL:=202206281738}
+: ${SERIAL:=$(date +%Y%m%d%H)}
 : ${REFRESH:=604800}
 : ${RETRY:=86400}
 : ${TTL:=604800}
@@ -38,7 +39,7 @@ fi
 
 TMP=$(mktemp -d)
 
-cat <<EOF > $TMP/zone.$ZONE.db
+cat <<EOF > $TMP/zone.$ZONE
 ; BIND data file for us-ne-1 lan0
 ;
 \$TTL   $TTL
@@ -55,6 +56,36 @@ cat <<EOF > $TMP/zone.$ZONE.db
 @           IN      A     $THIS_SERVER_IP ; Address of this server
 EOF
 
+cat <<EOF > $TMP/named.conf
+options {
+  directory "/var/cache/bind";
+  //dnssec-validation auto;
+  dnssec-validation no;
+  listen-on-v6 { any; };
+};
+include "/etc/bind/named.conf.$ZONE";
+EOF
+
+cat <<EOF > $TMP/named.conf.$ZONE
+zone "$ZONE" {
+    type master;
+    file "/etc/bind/zone.$ZONE";
+};
+EOF
+
+cat <<EOF > $TMP/run
+docker run -it -d \
+  --cidfile=.cid \
+  -v $THIS_PWD/named.conf:/etc/bind/named.conf \
+  -v $THIS_PWD/named.conf.$ZONE:/etc/bind/named.conf.$ZONE \
+  -v $THIS_PWD/zone.$ZONE:/etc/bind/zone.$ZONE \
+  --name bind9-container \
+  -e TZ=UTC \
+  -p 53:53 \
+  -p 53:53/udp \
+  ubuntu/bind9:latest
+EOF
+
 echo_slurp () {
   if [[ $VERBOSE -gt 10 ]]; then
     echo $slurped|tr ' ' '\n'|less
@@ -67,7 +98,7 @@ find_records_by_type () {
   echo_slurp
   while IFS="," read -r IP HOST 
   do
-    printf '%s\tIN\tA\t%s\n' $HOST $IP >> $TMP/$TYPE.zone.$ZONE.db
+    printf '%s\tIN\tA\t%s\n' $HOST $IP >> $TMP/$TYPE.zone.$ZONE
   done <<< $slurped
 }
 
@@ -77,9 +108,9 @@ find_records_by_type_host_first () {
   echo_slurp
   while IFS="," read -r HOST IP  
   do
-    printf '%s\tIN\tA\t%s\n' $HOST $IP >> $TMP/$TYPE.zone.$ZONE.db
+    printf '%s\tIN\tA\t%s\n' $HOST $IP >> $TMP/$TYPE.zone.$ZONE
   done <<< $slurped
-  #done < <( grep -P  "$TYPE" "$INPUT_CSV_FILE" | cut -d "," -f2,4 | sed "s/\.$ZONE//" ) >> $TMP/zone.$ZONE.db
+  #done < <( grep -P  "$TYPE" "$INPUT_CSV_FILE" | cut -d "," -f2,4 | sed "s/\.$ZONE//" ) >> $TMP/zone.$ZONE
 }
 
 find_records_by_type 'arecord'
@@ -89,15 +120,23 @@ find_records_by_type 'hostaddress'
 # I think this is redundant or may be used to make PTR records, but am including as it does add some unique hosts
 find_records_by_type_host_first 'hostrecord'
 
-cat $TMP/arecord.zone.$ZONE.db  $TMP/hostaddress.zone.$ZONE.db  $TMP/hostrecord.zone.$ZONE.db |sort|uniq >> $TMP/zone.$ZONE.db
-#cat $TMP/arecord.zone.$ZONE.db  |sort|uniq >> $TMP/zone.$ZONE.db
+cat $TMP/arecord.zone.$ZONE  $TMP/hostaddress.zone.$ZONE  $TMP/hostrecord.zone.$ZONE |sort|uniq >> $TMP/zone.$ZONE
+#cat $TMP/arecord.zone.$ZONE  |sort|uniq >> $TMP/zone.$ZONE
 
 if [[ $VERBOSE -gt 0 ]]; then
-  #head -n25 $TMP/zone.$ZONE.db
-  #less $TMP/zone.$ZONE.db
-  sort $TMP/zone.$ZONE.db |uniq -c|sort -rn|less
-  wc -l $TMP/zone.$ZONE.db
+  #head -n25 $TMP/zone.$ZONE
+  #less $TMP/zone.$ZONE
+  sort $TMP/zone.$ZONE |uniq -c|sort -rn|less
+  wc -l $TMP/zone.$ZONE
   #ls -alh $TMP|less
-  #cat $TMP/arecord.zone.$ZONE.db  $TMP/hostaddress.zone.$ZONE.db  $TMP/hostrecord.zone.$ZONE.db |sort|uniq -c|sort -rn|less
+  #cat $TMP/arecord.zone.$ZONE  $TMP/hostaddress.zone.$ZONE  $TMP/hostrecord.zone.$ZONE |sort|uniq -c|sort -rn|less
 fi
-echo -e "Your zone file is here --> $TMP/zone.$ZONE.db"
+#echo -e "Your zone file is here --> $TMP/zone.$ZONE"
+mv -v $TMP/zone.$ZONE $THIS_PWD/
+mv -v $TMP/named.conf $THIS_PWD/
+mv -v $TMP/named.conf.$ZONE $THIS_PWD/
+mv -v $TMP/run $THIS_PWD/
+rm $TMP/arecord.zone.example.com
+rm $TMP/hostaddress.zone.example.com
+rm $TMP/hostrecord.zone.example.com
+rmdir $TMP

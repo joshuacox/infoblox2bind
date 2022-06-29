@@ -1,0 +1,5 @@
+.cid
+named.conf
+named.conf.*
+run
+zone.*
