@@ -27,10 +27,7 @@ dig:
 test:
 	bats .ci/test.bats
 
-bats: $(KUBASH_BIN)
-	@scripts/kubashnstaller bats
-
-$(KUBASH_BIN)/bats:
+bats:
 	$(eval TMP := $(shell mktemp -d --suffix=BATSTMP))
 	cd $(TMP) \
 	&& git clone --depth=1 https://github.com/sstephenson/bats.git
