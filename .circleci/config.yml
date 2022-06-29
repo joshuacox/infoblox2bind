@@ -35,7 +35,8 @@ jobs:
             ./infoblox2bind.bash ./input.csv
             ./run
             docker ps
-            dig @0 ww2.example.com +short
+            sleep 5
+            dig @127.0.0.1 ww2.example.com +short
             make bats
             make test
             #docker build -t thalhalla/$IMAGE_NAME:$TAG .
