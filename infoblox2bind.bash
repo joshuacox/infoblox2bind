@@ -1,17 +1,34 @@
 #!/bin/bash
 # grep -P '^arecord' 220627_All\ DNS\ Objects.csv |cut -f2,4 -d, --output-delimiter=' '|sed 's/\.jhdc\.local//' |awk '{print "export IP="$1" ; export HOST="$2" ; echo -e $HOST\tIN\tA\t$IP "}' |bash |tr ' ' '\t'|tail -n5}'
-: ${INPUT_CSV_FILE:=input.csv}
 : ${ZONE:=example.com}
 : ${SERIAL:=202206281738}
 : ${REFRESH:=604800}
 : ${RETRY:=86400}
 : ${TTL:=604800}
+: ${VERBOSE:=0}
 : ${EXPIRE:=2419200}
 : ${NEGATIVE_CACHE_TTL:=604800}
 : ${THIS_SERVER_IP:=10.0.0.1}
 
+if [ $# -gt 1 ]; then
+  # Print usage
+  echo -n 'Error! wrong number of arguments'
+  echo " [$#]"
+  echo 'usage:'
+  echo "$0 INPUT_CSV_FILE"
+  exit 1
+elif [ $# -eq 0 ]; then
+  # We can use INPUT_CSV_FILE from a default or environment
+: ${INPUT_CSV_FILE:=input.csv}
+elif [ $# -eq 1 ]; then
+  # Or we can take an input file as argument
+INPUT_CSV_FILE=$1
+fi
+
 if [[ -f $INPUT_CSV_FILE ]]; then
-  echo "using $INPUT_CSV_FILE"
+  if [[ $VERBOSE -gt 0 ]]; then
+    echo "using $INPUT_CSV_FILE"
+  fi
 else
   echo 'Please supply an INPUT_CSV_FILE'
   echo 'e.g.'
@@ -83,4 +100,4 @@ if [[ $VERBOSE -gt 0 ]]; then
   #ls -alh $TMP|less
   #cat $TMP/arecord.zone.$ZONE.db  $TMP/hostaddress.zone.$ZONE.db  $TMP/hostrecord.zone.$ZONE.db |sort|uniq -c|sort -rn|less
 fi
-echo -e "\n\nYour zone file is here --> $TMP/zone.$ZONE.db"
+echo -e "Your zone file is here --> $TMP/zone.$ZONE.db"
