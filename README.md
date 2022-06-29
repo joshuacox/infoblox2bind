@@ -37,7 +37,6 @@ Then run the script:
 
 ```
 ./infoblox2bind.bash
-using /tmp/555_All DNS Objects.csv
 ```
 
 You can also specify the input file as the only argument:
@@ -49,11 +48,16 @@ You can also specify the input file as the only argument:
 This will output a few files.
 
 ```
-named.conf # This is a generated named.conf
-named.conf.example.com # This is a generated named.conf.example.com
-zone.example.com # This is the generated zonefile
-run # This can be used to test the above files in a container
+renamed '/tmp/tmp.l3W6nA7Pl3/zone.example.com' -> '/tmp/infoblox2bind/zone.example.com'
+renamed '/tmp/tmp.l3W6nA7Pl3/named.conf' -> '/tmp/infoblox2bind/named.conf'
+renamed '/tmp/tmp.l3W6nA7Pl3/named.conf.example.com' -> '/tmp/infoblox2bind/named.conf.example.com'
+renamed '/tmp/tmp.l3W6nA7Pl3/run' -> '/tmp/infoblox2bind/run'
 ```
+
+1. named.conf # This is a generated named.conf
+1. named.conf.example.com # This is a generated named.conf.example.com
+1. zone.example.com # This is the generated zonefile
+1. run # This can be used to test the above files in a container
 
 ### Debug
 
