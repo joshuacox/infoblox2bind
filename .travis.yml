@@ -6,8 +6,8 @@ matrix:
       services:
       - docker
       env:
-        - KUBE_VERSION=v1.21.0
-        - MINIKUBE_VERSION=v1.21.0
+        - KUBE_VERSION=v1.23.8
+        - MINIKUBE_VERSION=v1.26.0
         - MINIKUBE_DRIVER=docker
         - MINIKUBE_MEMORY=7777
         - MINIKUBE_CPU=4
