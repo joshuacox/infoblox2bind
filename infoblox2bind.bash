@@ -132,3 +132,4 @@ rm $TMP/arecord.zone.example.com
 rm $TMP/hostaddress.zone.example.com
 rm $TMP/hostrecord.zone.example.com
 rmdir $TMP
+exit 0
