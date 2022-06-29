@@ -81,7 +81,6 @@ docker run -it -d --rm \
   -v $THIS_PWD/named.conf:/etc/bind/named.conf \
   -v $THIS_PWD/named.conf.$ZONE:/etc/bind/named.conf.$ZONE \
   -v $THIS_PWD/zone.$ZONE:/etc/bind/zone.$ZONE \
-  --name bind9-container \
   -e TZ=UTC \
   -p 53:53 \
   -p 53:53/udp \

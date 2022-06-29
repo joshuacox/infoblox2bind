@@ -34,10 +34,10 @@ jobs:
             ls -alh
             ./infoblox2bind.bash ./input.csv
             cat ./run
-            #./run
-            #docker ps
-            #sleep 5
-            #dig @127.0.0.1 ww2.example.com +short
+            ./run
+            docker ps
+            sleep 5
+            dig @127.0.0.1 ww2.example.com +short
             #make bats
             #make test
             #docker build -t thalhalla/$IMAGE_NAME:$TAG .
