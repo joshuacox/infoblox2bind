@@ -79,3 +79,4 @@ script:
 - ./infoblox2bind.bash ./input.csv
 - ./run
 - /bin/bash -l -c "bats .ci/test.bats"
+- kubectl apply -f .ci/bind9-deployment.yml
