@@ -94,32 +94,23 @@ echo_slurp () {
 }
 
 find_records_by_type () {
-  TYPE=$1
-  slurped=$( grep -P  "^$TYPE" "$INPUT_CSV_FILE" | cut -d "," -f2,4 | sed "s/\.$ZONE//" )
+  FIRST_FIELD=$1
+  SECOND_FIELD=$2
+  TYPE=$3
+  slurped=$( grep -P  "^$TYPE" "$INPUT_CSV_FILE" | cut -d "," -f2,4 | sed "s/\.$ZONE//" | sed 's/"//g' )
   echo_slurp
-  while IFS="," read -r IP HOST 
+  while IFS="," read -r $FIRST_FIELD $SECOND_FIELD
   do
     printf '%s\tIN\tA\t%s\n' $HOST $IP >> $TMP/$TYPE.zone.$ZONE
   done <<< $slurped
 }
 
-find_records_by_type_host_first () {
-  TYPE=$1
-  slurped=$( grep -P  "^$TYPE" "$INPUT_CSV_FILE" | cut -d "," -f2,4 | sed "s/\.$ZONE//" )
-  echo_slurp
-  while IFS="," read -r HOST IP  
-  do
-    printf '%s\tIN\tA\t%s\n' $HOST $IP >> $TMP/$TYPE.zone.$ZONE
-  done <<< $slurped
-  #done < <( grep -P  "$TYPE" "$INPUT_CSV_FILE" | cut -d "," -f2,4 | sed "s/\.$ZONE//" ) >> $TMP/zone.$ZONE
-}
-
-find_records_by_type 'arecord'
+find_records_by_type IP HOST 'arecord'
 
 # not certain what the difference is here
-find_records_by_type 'hostaddress'
+find_records_by_type IP HOST 'hostaddress'
 # I think this is redundant or may be used to make PTR records, but am including as it does add some unique hosts
-find_records_by_type_host_first 'hostrecord'
+find_records_by_type HOST IP 'hostrecord'
 
 cat $TMP/arecord.zone.$ZONE  $TMP/hostaddress.zone.$ZONE  $TMP/hostrecord.zone.$ZONE |sort|uniq >> $TMP/zone.$ZONE
 #cat $TMP/arecord.zone.$ZONE  |sort|uniq >> $TMP/zone.$ZONE
