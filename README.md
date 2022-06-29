@@ -43,6 +43,12 @@ using /tmp/555_All DNS Objects.csv
 Your zone file is here --> /tmp/tmp.Ee2B2lSOG0/zone.example.org.db
 ```
 
+You can also specify the input file as the only argument:
+
+```
+./infoblox2bind.bash /tmp/555_All\ DNS\ Objects.csv
+```
+
 ### Debug
 
 Get some extra verbosity:

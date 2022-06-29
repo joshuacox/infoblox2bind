@@ -32,7 +32,7 @@ if [[ -f $INPUT_CSV_FILE ]]; then
 else
   echo 'Please supply an INPUT_CSV_FILE'
   echo 'e.g.'
-  echo "export INPUT_CSV_FILE=/tmp/this.csv; $0"
+  echo "$0 /tmp/555_All\ DNS\ Objects.csv"
   exit 1
 fi
 
