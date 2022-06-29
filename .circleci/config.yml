@@ -33,12 +33,13 @@ jobs:
             pwd
             ls -alh
             ./infoblox2bind.bash ./input.csv
-            ./run
-            docker ps
-            sleep 5
-            dig @127.0.0.1 ww2.example.com +short
-            make bats
-            make test
+            cat ./run
+            #./run
+            #docker ps
+            #sleep 5
+            #dig @127.0.0.1 ww2.example.com +short
+            #make bats
+            #make test
             #docker build -t thalhalla/$IMAGE_NAME:$TAG .
             #echo "echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin"
             #echo docker push ariv3ra/$IMAGE_NAME:$TAG
